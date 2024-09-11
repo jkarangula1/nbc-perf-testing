@@ -17,8 +17,8 @@ az eventgrid namespace create \
 az eventgrid namespace topic create --name $EVENTGRID_TOPIC_NAME --namespace-name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP
 
 # Create the client certificate
-mkdir $EVENTGRID_FLOW_CLIENT_ID
-pushd $EVENTGRID_FLOW_CLIENT_ID
+mkdir -p cert/$EVENTGRID_FLOW_CLIENT_ID
+pushd cert/$EVENTGRID_FLOW_CLIENT_ID
 openssl ecparam -out ca_key.pem -name prime256v1 -genkey
 openssl req -new -days 3650 -nodes -x509 -key ca_key.pem -out ca_cert.pem -subj "/CN=Perf Tests CA" -extensions v3_ca
 echo -e "Created CA cert"
@@ -34,7 +34,7 @@ az eventgrid namespace ca-certificate create \
   --namespace-name $EVENTGRID_NAMESPACE \
   --ca-certificate-name perf-ca-cert \
   --description "Perf test CA cert" \
-  --certificate "./$EVENTGRID_FLOW_CLIENT_ID/ca_cert.pem"
+  --certificate "./cert/$EVENTGRID_FLOW_CLIENT_ID/ca_cert.pem"
 
 az eventgrid namespace topic-space create --name perf-topic-space --namespace-name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP --topic-template "[#]"
 
@@ -46,4 +46,4 @@ az eventgrid namespace permission-binding create \
   --client-group-name "\$all" \
   --permission "Publisher"
 
-kubectl create secret generic eventgrid-secret --from-file=client_cert.pem=./$EVENTGRID_FLOW_CLIENT_ID/device_ec_cert.pem --from-file=client_key.pem=./$EVENTGRID_FLOW_CLIENT_ID/device_ec_key.pem
+kubectl create secret generic eventgrid-secret --from-file=client_cert.pem=./cert/$EVENTGRID_FLOW_CLIENT_ID/device_ec_cert.pem --from-file=client_key.pem=./cert/$EVENTGRID_FLOW_CLIENT_ID/device_ec_key.pem
