@@ -1,0 +1,72 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: datalake-target
+  namespace: default
+spec:
+  endpointType: datalakeStorageSettings
+  datalakeStorageSettings:
+    host: "https://nbcperfstorage.blob.core.windows.net/"
+    batching:
+      latencySeconds: 0
+      maxMessages: 100
+    authentication:
+      method: UserAssignedManagedIdentity
+      userAssignedManagedIdentitySettings:
+        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-datalake
+  namespace: default
+spec:
+  profileRef: mq-datalake-perf-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - value
+          output: value
+        schemaRef: "dss://parquet.json"
+        serializationFormat: "Parquet"
+    - operationType: destination
+      destinationSettings:
+        endpointRef: datalake-target
+        dataDestination: $STORAGE_CONTAINER_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: mq-datalake-perf-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "debug"

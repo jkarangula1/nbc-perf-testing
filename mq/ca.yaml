@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: aio-ca-issuer
+  namespace: default
+spec:
+  ca:
+    # Must match secretName of generated or imported CA cert
+    secretName: test-ca

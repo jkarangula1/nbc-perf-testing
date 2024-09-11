@@ -1,0 +1,73 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: adx-target
+  namespace: default
+spec:
+  endpointType: dataExplorerSettings
+  dataExplorerSettings:
+    host: "https://nbc-perf-adx-cluster.westus3.kusto.windows.net"
+    database: "nbc_perf_db"
+    batching:
+      latencySeconds: 5
+      maxMessages: 10000
+    authentication:
+      method: UserAssignedManagedIdentity
+      userAssignedManagedIdentitySettings:
+        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-adx
+  namespace: default
+spec:
+  profileRef: adx-perf-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - value
+          output: value
+        schemaRef: "dss://parquet.json"
+        serializationFormat: "Parquet"
+    - operationType: destination
+      destinationSettings:
+        endpointRef: adx-target
+        dataDestination: PerfTable
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: adx-perf-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "debug"

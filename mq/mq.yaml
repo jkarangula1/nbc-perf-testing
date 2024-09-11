@@ -1,0 +1,50 @@
+apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+kind: Broker
+metadata:
+  name: broker
+  namespace: default
+spec:
+  advanced:
+    encryptInternalTraffic: Disabled
+  cardinality:
+    frontend:
+      replicas: 5
+      workers: 2
+    backendChain:
+      redundancyFactor: 2
+      partitions: 5
+      workers: 1
+  diagnostics:
+    logs:
+      level: trace,hyper=off,kube_client=off,tower=off,conhash=off,h2=off
+    metrics:
+      prometheusPort: 9600
+    selfCheck:
+      mode: Disabled
+    traces:
+      mode: Disabled
+      selfTracing:
+        mode: Enabled
+        intervalSeconds: 60
+  generateResourceLimits:
+    cpu: Disabled
+---
+apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+kind: BrokerListener
+metadata:
+  name: "aio-broker-listener"
+  namespace: default
+spec:
+  brokerRef: broker
+  serviceType: loadBalancer
+  ports:
+    - port: 1883
+      protocol: mqtt
+    - port: 8883
+      protocol: mqtt
+      tls:
+        mode: Automatic
+        certManagerCertificateSpec:
+          issuerRef:
+            name: aio-ca-issuer
+            kind: Issuer

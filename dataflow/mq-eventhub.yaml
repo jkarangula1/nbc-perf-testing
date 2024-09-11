@@ -1,0 +1,175 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: kafka-target
+  namespace: default
+spec:
+  endpointType: kafkaSettings
+  kafkaSettings:
+    copyMqttProperties: Enabled
+    cloudEventAttributes: CreateOrRemap
+    host: $EVENTHUB_KAFKA_DOMAIN
+    tls:
+      mode: Enabled
+    authentication:
+      method: Sasl
+      saslSettings:
+        saslType: plain
+        secretRef: "eh-secret"
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-kafka
+  namespace: default
+spec:
+  profileRef: mq-eh-perf-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - '"i=2258".Value'
+          output: newi.newValue
+
+        - inputs:
+          - '"i=2258".SourceTimestamp'
+          output: newi.newSourceTimestamp
+
+        - inputs:
+          - '"i=2258".ServerTimestamp'
+          output: newi.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".Value'
+          output: newNsu.Value
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".ServerTimestamp'
+          output: newNsu.ServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".SourceTimestamp'
+          output: newNsu.SourceTimestamp
+
+        - inputs:
+          - '"ns=23;i=1259".Value'
+          output: newNsi.newValue
+
+        - inputs:
+          - '"ns=23;i=1259".SourceTimestamp'
+          output: newNsi.newSourceTimestamp
+
+        - inputs:
+          - '"ns=23;i=1259".ServerTimestamp'
+          output: newNsi.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".Value'
+          output: newOpcScalar1.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".SourceTimestamp'
+          output: newOpcScalar1.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".ServerTimestamp'
+          output: newOpcScalar1.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar2".Value'
+          output: newOpcScalar2.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar2".SourceTimestamp'
+          output: newOpcScalar2.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".ServerTimestamp'
+          output: newOpcScalar2.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".Value'
+          output: newOpcScalar3.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".SourceTimestamp'
+          output: newOpcScalar3.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".ServerTimestamp'
+          output: newOpcScalar3.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".Value'
+          output: newOpcBool.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".SourceTimestamp'
+          output: newOpcBool.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".ServerTimestamp'
+          output: newOpcBool.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".Value'
+          output: newOpcSignedInt32.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".SourceTimestamp'
+          output: newOpcSignedInt32.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".ServerTimestamp'
+          output: newOpcSignedInt32.newServerTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".Value'
+          output: newOpcUnsignedInt32.newValue
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".SourceTimestamp'
+          output: newOpcUnsignedInt32.newSourceTimestamp
+
+        - inputs:
+          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".ServerTimestamp'
+          output: newOpcUnsignedInt32.newServerTimestamp
+    - operationType: destination
+      destinationSettings:
+        endpointRef: kafka-target
+        dataDestination: $EVENTHUB_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: mq-eh-perf-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "debug"

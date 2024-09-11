@@ -1,0 +1,62 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: eventgrid-target
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: $EVENTGRID_MQTT_DOMAIN
+    tls:
+      mode: Enabled
+    authentication:
+      method: X509Certificate
+      x509CertificateSettings:
+        secretRef: eventgrid-secret
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: $EVENTGRID_FLOW_NAME
+  namespace: default
+spec:
+  profileRef: mq-eventgrid-perf-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: destination
+      destinationSettings:
+        endpointRef: eventgrid-target
+        dataDestination: $EVENTGRID_TOPIC_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: mq-eventgrid-perf-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "trace"

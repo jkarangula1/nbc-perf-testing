@@ -1,0 +1,70 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-target
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    cloudEventAttributes: CreateOrRemap
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqttSettings
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-mq
+  namespace: default
+spec:
+  profileRef: mq-perf-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - value
+          output: value
+    - operationType: destination
+      destinationSettings:
+        endpointRef: mq-target
+        dataDestination: dest
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: mq-perf-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "debug"
