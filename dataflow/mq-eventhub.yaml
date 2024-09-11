@@ -169,7 +169,7 @@ metadata:
   name: mq-eh-perf-flow
   namespace: default
 spec:
-  instanceCount: 1
+  instanceCount: 5
   diagnostics:
     logs:
-      level: "debug"
+      level: "info"

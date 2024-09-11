@@ -11,7 +11,7 @@ az login
 ./depl-aks.sh
 
 # Deploy MQ to get the broker cert deployed
-./depl-mq.sh
+./depl-broker.sh
 
 # Pick which endpoint you are trying to test and deploy it
 # Deploy an Eventhub
