@@ -1,3 +1,3 @@
 #!/bin/bash
 
-git clone git@github.com:Azure/one-connector.git
+./dss/dss_set -a 127.0.0.1 --port 11883 -k parquet.json -f schemas/parquet.parquet
