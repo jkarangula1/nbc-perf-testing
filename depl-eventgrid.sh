@@ -29,12 +29,21 @@ openssl x509 -req -in device_ec_cert.csr -CA ca_cert.pem -CAkey ca_key.pem -CAcr
 echo -e "Created device cert"
 popd
 
+# Removing the last newline from the CA cert since Event Grid doesn't like it
+sed -z '$ s/\n$//' ./cert/$EVENTGRID_FLOW_CLIENT_ID/ca_cert.pem > ./cert/$EVENTGRID_FLOW_CLIENT_ID/ca_cert_upload.pem
+
 az eventgrid namespace ca-certificate create \
   --resource-group $RESOURCE_GROUP \
   --namespace-name $EVENTGRID_NAMESPACE \
   --ca-certificate-name perf-ca-cert \
   --description "Perf test CA cert" \
-  --certificate "./cert/$EVENTGRID_FLOW_CLIENT_ID/ca_cert.pem"
+  --certificate "./cert/$EVENTGRID_FLOW_CLIENT_ID/ca_cert_upload.pem"
+
+az eventgrid namespace client create \
+  --resource-group $RESOURCE_GROUP \
+  --namespace-name $EVENTGRID_NAMESPACE \
+  -n $EVENTGRID_FLOW_CLIENT_ID \
+  --client-certificate-authentication "{validationScheme:SubjectMatchesAuthenticationName}"
 
 az eventgrid namespace topic-space create --name perf-topic-space --namespace-name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP --topic-template "[#]"
 
