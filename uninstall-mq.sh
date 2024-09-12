@@ -2,4 +2,4 @@
 
 source .env
 
-helm uninstall mq
+helm uninstall aio-broker

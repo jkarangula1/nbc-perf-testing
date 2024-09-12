@@ -16,7 +16,7 @@ spec:
       workers: 1
   diagnostics:
     logs:
-      level: trace,hyper=off,kube_client=off,tower=off,conhash=off,h2=off
+      level: info,hyper=off,kube_client=off,tower=off,conhash=off,h2=off
     metrics:
       prometheusPort: 9600
     selfCheck:
