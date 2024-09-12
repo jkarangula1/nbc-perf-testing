@@ -13,7 +13,15 @@ else
 fi
 
 # Create the AKS cluster
-az aks create --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --node-count 5 --enable-managed-identity --node-vm-size Standard_D4as_v5 --generate-ssh-keys --enable-oidc-issuer
+az aks create \
+  --resource-group $RESOURCE_GROUP \
+  --name $CLUSTER_NAME \
+  --node-count 5 \
+  --enable-managed-identity \
+  --node-vm-size Standard_D4as_v5 \
+  --generate-ssh-keys \
+  --enable-oidc-issuer
+
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
 
 # To show the OIDC repo name
