@@ -2,7 +2,7 @@
     value: string
 )
 
-.alter database nbc_perf_db policy streamingingestion enable
+.alter database $ADX_DB_NAME policy streamingingestion enable
 .alter table PerfTable policy streamingingestion enable
 
-.add database ['nbc_perf_db'] ingestors ('aadapp=6dbf9c31-36b3-47c9-8ffa-d80af07410c5;72f988bf-86f1-41af-91ab-2d7cd011db47')
+.add database ['$ADX_DB_NAME'] ingestors ('aadapp=$MANAGED_IDENTITY_CLIENT_ID;72f988bf-86f1-41af-91ab-2d7cd011db47')

@@ -17,7 +17,7 @@ resource perfTestDbs 'Microsoft.Kusto/clusters/databases/scripts@2022-02-01' = {
     name: scriptName
     parent: db
     properties: {
-        scriptContent: loadTextContent('table-create.kql')
+        scriptContent: loadTextContent('table-create-filled.kql')
         continueOnErrors: continueOnErrors
         forceUpdateTag: forceUpdateTag
     }
