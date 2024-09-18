@@ -8,7 +8,7 @@ echo "Deploying the cert manager"
 
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.yaml
 
-echo "Sleeping for 10 seconds to let CRDs populate"
+echo "Sleeping for 10 seconds to let cert manager populate"
 sleep 10
 
 kubectl apply -f ./mq/issuer.yaml

@@ -32,7 +32,7 @@ spec:
 apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
 kind: BrokerListener
 metadata:
-  name: "aio-broker-listener"
+  name: "aio-broker"
   namespace: default
 spec:
   brokerRef: broker

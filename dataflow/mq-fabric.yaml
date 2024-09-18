@@ -1,19 +1,23 @@
 apiVersion: connectivity.iotoperations.azure.com/v1beta1
 kind: DataflowEndpoint
 metadata:
-  name: datalake-target
+  name: fabric-target
   namespace: default
 spec:
-  endpointType: datalakeStorageSettings
-  datalakeStorageSettings:
-    host: "https://nbcperfstorage.blob.core.windows.net/"
+  endpointType: fabricOneLakeSettings
+  fabricOneLakeSettings:
+    host: "https://msit-onelake.dfs.fabric.microsoft.com"
+    oneLakePathType: Tables
+    names:
+      lakehouseName: dwaltonlakehouse
+      workspaceName: dwalton-connector-test
     batching:
       latencySeconds: 0
       maxMessages: 100
     authentication:
       method: UserAssignedManagedIdentity
       userAssignedManagedIdentitySettings:
-        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        clientId: 49fc70e0-95af-4457-9a5f-79ff6295e491
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1beta1
@@ -24,10 +28,10 @@ metadata:
 spec:
   endpointType: mqttSettings
   mqttSettings:
-    host: "aio-broker:8883"
+    host: "aio-broker:1883"
     tls:
-      mode: Enabled
-      trustedCaCertificateConfigMapRef: aio-broker-ca
+      mode: Disabled
+      # trustedCaCertificateConfigMapRef: ca-certificates
     maxInflightMessages: 10000
     authentication:
       method: ServiceAccountToken
@@ -37,10 +41,10 @@ spec:
 apiVersion: connectivity.iotoperations.azure.com/v1beta1
 kind: Dataflow
 metadata:
-  name: mq-to-datalake
+  name: mq-to-fabric
   namespace: default
 spec:
-  profileRef: mq-datalake-perf-flow
+  profileRef: dane-flow
   operations:
     - operationType: source
       sourceSettings:
@@ -57,16 +61,16 @@ spec:
         serializationFormat: "Delta"
     - operationType: destination
       destinationSettings:
-        endpointRef: datalake-target
-        dataDestination: $STORAGE_CONTAINER_NAME
+        endpointRef: fabric-target
+        dataDestination: dest
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1beta1
 kind: DataflowProfile
 metadata:
-  name: mq-datalake-perf-flow
+  name: dane-flow
   namespace: default
 spec:
   instanceCount: 1
   diagnostics:
     logs:
-      level: "debug"
+      level: "info"
