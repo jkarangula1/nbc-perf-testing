@@ -21,6 +21,7 @@ az login
 # Deploy an Event Grid
 ./depl-eventgrid.sh
 # Deploy an Azure Data Explorer (ADX)
+./depl-adx.sh
 
 # If using an endpoint which needs a schema, set it in the DSS
 # Make sure to check if the schema matches what you want to send
