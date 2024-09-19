@@ -25,7 +25,7 @@ spec:
   endpointType: dataExplorerSettings
   dataExplorerSettings:
     host: "https://nbc-perf-adx-cluster.westus3.kusto.windows.net"
-    database: "nbc_perf_db"
+    database: "$ADX_DB_NAME"
     batching:
       latencySeconds: 5
       maxMessages: 10000

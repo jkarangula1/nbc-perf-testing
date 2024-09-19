@@ -51,3 +51,7 @@ az storage account network-rule add \
 # Get the managed identity and add the Storage Blob Data Contributor role
 export MANAGED_IDENTITY_CLIENT_ID=$(az identity show --name $USER_IDENTITY_NAME --resource-group $RESOURCE_GROUP --query principalId -o tsv)
 az role assignment create --assignee-object-id $MANAGED_IDENTITY_CLIENT_ID --assignee-principal-type ServicePrincipal --role "Storage Blob Data Contributor" --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Storage/storageAccounts/$STORAGE_ACCOUNT_NAME
+
+# Get my own object ID
+export USER_OBJECT_ID=$(az ad signed-in-user show --query id -o tsv)
+az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Storage/storageAccounts/$STORAGE_ACCOUNT_NAME
