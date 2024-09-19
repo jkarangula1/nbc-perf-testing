@@ -6,7 +6,7 @@ metadata:
 spec:
   endpointType: datalakeStorageSettings
   datalakeStorageSettings:
-    host: "https://nbcperfstorage.blob.core.windows.net/"
+    host: "https://$STORAGE_ACCOUNT_NAME.blob.core.windows.net/"
     batching:
       latencySeconds: 0
       maxMessages: 100
