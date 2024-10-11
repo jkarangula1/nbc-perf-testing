@@ -6,13 +6,14 @@ metadata:
 spec:
   advanced:
     encryptInternalTraffic: Disabled
+  memoryProfile: "Tiny"
   cardinality:
     frontend:
-      replicas: 5
-      workers: 2
+      replicas: 1
+      workers: 1
     backendChain:
-      redundancyFactor: 2
-      partitions: 5
+      redundancyFactor: 1
+      partitions: 1
       workers: 1
   diagnostics:
     logs:

@@ -1,0 +1,303 @@
+    1  curl -sfL https://get.k3s.io | sh -
+    2  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    3  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    4  kubectl get pods
+    5  KUBECONFIG=$HOME/.kube/config
+    6  kubectl get pods
+    7  mkdir -p $HOME/.kube
+    8  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    9  kubectl get pods
+   10  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   11  sudo cp -i /home/username/admin.conf $HOME/.kube/config
+   12  sudo k3s kubectl config view --raw > "$KUBECONFIG"
+   13  echo $KUBECONFIG
+   14  export KUBECONFIG=~/.kube/config
+   15  kubectl get pods
+   16  git clone git@github.com:danewalton/nbc-perf-testing.git
+   17  ssh-keygen -t ed25519 -C "your_email@example.com"
+   18  ssh-add c:/Users/YOU/.ssh/id_ed25519
+   19  eval "$(ssh-agent -s)"
+   20  ssh-add ~/.ssh/id_ed25519
+   21  cat ~/.ssh/id_ed25519.pub
+   22  git clone git@github.com:danewalton/nbc-perf-testing.git
+   23  gcd nbc-perf-testing/
+   24  git clone git@github.com:Azure/one-connector.git
+   25  ./depl-broker.sh 
+   26  az login
+   27  curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+   28  az account set --subscription iot-edge-sublib-002
+   29  az login
+   30  az login --use-device-code
+   31  az account set --subscription iot-edge-sublib-002
+   32  ./depl-broker.sh 
+   33  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+   34  ./depl-broker.sh 
+   35  kubectl get pods
+   36  ./depl-dataflow.sh eventhub
+   37  kubectl get pods
+   38  kubectl logs aio-dataflow-operator-0 
+   39  source .env
+   40  kubectl delete secret eh-secret
+   41  az eventhubs eventhub authorization-rule keys list   --resource-group $RESOURCE_GROUP   --namespace-name $EVENTHUB_NAMESPACE   --eventhub-name $EVENTHUB_NAME   --name $EVENTHUB_ACCESS_POLICY_NAME   --query "primaryConnectionString"   | xargs -d '\n' -I {} sh -c 'kubectl create secret generic eh-secret --from-literal=username="\$ConnectionString" --from-literal=password={}'
+   42  kubectl get pods
+   43  kubectl delete pod aio-dataflow-operator-0 
+   44  kubectl get pods
+   45  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   46  help
+   47  history
+   48  kubectl get secret
+   49  kubectl get secrets
+   50  ls
+   51  cd one-connector/
+   52  git status
+   53  cd ..
+   54  kubectl get config map
+   55  kubectl get configmap
+   56  ./uninstall-dataflow.sh 
+   57  ./depl-dataflow.sh 
+   58  sudo apt-get install jq
+   59  ./uninstall-dataflow.sh 
+   60  ./uninstall-mq.sh 
+   61  ./depl-broker.sh 
+   62  ./depl-dataflow.sh eventhub
+   63  kubectl get pods
+   64  kubectl get svc
+   65  ./dss/dss_set -k quality -f context.json -a 127.0.0.1 --port 1883
+   66  kubectl logs 
+   67  kubectl get pods
+   68  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   69  ./uninstall-dataflow.sh 
+   70  ./uninstall-mq.sh 
+   71  ./depl-broker.sh 
+   72  ./uninstall-mq.sh 
+   73  ./depl-broker.sh 
+   74  ./depl-dataflow.sh eventhub
+   75  ./dss/dss_set -k quality -f context.json -a 127.0.0.1 --port 1883
+   76  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   77  kubectl logs aio-dataflow-mq-eh-perf-flow-1
+   78  kubectl logs aio-dataflow-mq-eh-perf-flow-2
+   79  kubectl logs aio-dataflow-mq-eh-perf-flow-3
+   80  kubectl logs aio-dataflow-mq-eh-perf-flow-4
+   81  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   82  ./depl-dataflow.sh eventhub
+   83  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   84  kubectl get pods
+   85  kubectl logs aio-dataflow-mq-eh-perf-flow-3
+   86  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   87  ./uninstall-dataflow.sh 
+   88  ./depl-dataflow.sh eventhub
+   89  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   90  ./uninstall-dataflow.sh 
+   91  ./depl-dataflow.sh eventhub
+   92  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+   93  ./uninstall-dataflow.sh 
+   94  ./depl-dataflow.sh eventhub
+   95  ./uninstall-dataflow.sh 
+   96  ./depl-dataflow.sh eventhub
+   97  kubectl get pods
+   98  ./uninstall-dataflow.sh 
+   99  ./depl-dataflow.sh eventhub
+  100  ./uninstall-dataflow.sh 
+  101  ./depl-dataflow.sh eventhub
+  102  kubectl get pods
+  103  ./uninstall-dataflow.sh 
+  104  ./depl-dataflow.sh eventhub
+  105  ./uninstall-dataflow.sh 
+  106  ./depl-dataflow.sh eventhub
+  107  kubectl get pods
+  108  kubectl logs aio-dataflow-operator-0 
+  109  ./uninstall-dataflow.sh 
+  110  ./depl-dataflow.sh eventhub
+  111  kubectl get pods
+  112  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+  113  htop
+  114  kubeclt get pods
+  115  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+  116  kubectl logs aio-dataflow-mq-eh-perf-flow-1
+  117  kubeclt get pods
+  118  kubectl get pods
+  119  ./uninstall-dataflow.sh 
+  120  ./depl-dataflow.sh eventhub
+  121  kubectl get pods
+  122  kubectl logs aio-dataflow-mq-eh-perf-flow-0
+  123  cd on
+  124  ls
+  125  git clone git@github.com:Azure/one-connector.git
+  126  cd one-connector/
+  127  git checkout release/0.2
+  128  kubectl get pods
+  129  history
+  130  ./uninstall-dataflow.sh 
+  131  ./uninstall-mq.sh
+  132  ./depl-broker.sh 
+  133  kubectl get pods
+  134  docker 
+  135  kubectl get pods
+  136  ./uninstall-dataflow.sh 
+  137  ./uninstall-mq.sh
+  138  sudo chmod +x script.sh
+  139  ./script.sh 
+  140  az login
+  141  ./script.sh 
+  142  cat /etc/rancher/k3s/config.yaml
+  143  kubectl get pods
+  144  touch /etc/rancher/k3s/config.yaml
+  145  sudo touch /etc/rancher/k3s/config.yaml
+  146  ls /etc/rancher/k3s/config.yaml 
+  147  ls /etc/rancher/k3s/
+  148  cat k3s.yaml
+  149  cat /etc/rancher/k3s/k3s.yaml
+  150  sudo cat /etc/rancher/k3s/k3s.yaml
+  151  sudo rm /etc/rancher/k3s/config.yaml 
+  152  sudo nano /etc/rancher/k3s/config.yaml 
+  153  sudo nano /etc/rancher/k3s/l3s.yaml 
+  154  sudo nano /etc/rancher/k3s/k3s.yaml 
+  155  sudo touch /etc/rancher/k3s/config.yaml
+  156  sudo nano /etc/rancher/k3s/config.yaml 
+  157  az connectedk8s show --resource-group hugues --name  offline-scenario-arc --query oidcIssuerProfile.issuerUrl --output tsv
+  158  sudo nano /etc/rancher/k3s/config.yaml 
+  159  systemctl restart k3s
+  160  sudo systemctl restart k3s
+  161  sudo cat /etc/rancher/k3s/config.yaml 
+  162  kubectl get pods
+  163  ./depl-broker.sh 
+  164  kubectl get pods
+  165  ./depl-dataflow_all.sh
+  166  kubectl get pods
+  167  ./depl-dataflow_all.sh
+  168  source .env
+  169  export EVENTGRID_MQTT_DOMAIN=$(az eventgrid namespace show --name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP --query "topicSpacesConfiguration.hostname" -o tsv)
+  170  az eventgrid namespace show --name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP --query "topicSpacesConfiguration.hostname" -o tsv
+  171  export EVENTGRID_MQTT_DOMAIN=$(az eventgrid namespace show --name $EVENTGRID_NAMESPACE --resource-group hugues --query "topicSpacesConfiguration.hostname" -o tsv)
+  172  ./depl-eventgrid.sh 
+  173  export EVENTGRID_MQTT_DOMAIN=$(az eventgrid namespace show --name $EVENTGRID_NAMESPACE --resource-group $RESOURCE_GROUP --query "topicSpacesConfiguration.hostname" -o tsv)
+  174  export EVENTHUB_KAFKA_DOMAIN=$(az eventhubs namespace show --resource-group $RESOURCE_GROUP --namespace-name $EVENTHUB_NAMESPACE --query "serviceBusEndpoint" | sed -e 's/https:\/\///g' | sed 's/:443\//:9093/g')
+  175  ./depl-dataflow_all.sh
+  176  git status
+  177  git remote -v
+  178  ./depl-dataflow_all.sh
+  179  echo $EVENTGRID_FLOW_NAME
+  180  ./depl-dataflow_all.sh
+  181  ./uninstall-dataflow.sh 
+  182  ./depl-dataflow_all.sh
+  183  kubectl get svc
+  184  kubectl logs aio-dataflow-mq-offline-flow-0 
+  185  kubectl logs aio-dataflow-mq-offline-flow-0  > test
+  186  az connectedk8s show --resource-group hugues --name  offline-scenario-arc --query oidcIssuerProfile.issuerUrl --output tsv
+  187  sudo chmod +x script2.sh 
+  188  source .env
+  189  ./script2.sh 
+  190  ./depl-aks.sh 
+  191  az account set --subscription 249c0d61-388d-45ad-ba35-f9899f4c1374
+  192  az aks get-credentials --resource-group nbc-exit-criteria-hugues2-rg --name nbc-exit-criteria-hugues2-cluster --overwrite-existing
+  193  kubectl get pods
+  194  kubectl get node
+  195  ./depl-broker.sh 
+  196  ./depl-dataflow_all.sh
+  197  echo $MANAGED_IDENTITY_CLIENT_ID
+  198  echo $USER_IDENTITY_NAME
+  199  kubectl logs aio-dataflow-operator-0 
+  200  kubectl logs azure-wi-webhook-controller-manager-675f4477b9-t7wcb -n arc-workload-identity
+  201  sudo apt install mosquitto-clients
+  202  ./dss/dss_set -a 127.0.0.1 --port 1883 -k parquet.json -f schemas/parquet.parquet
+  203  ./dss/dss_set -a 127.0.0.1 --port 18883 -k parquet.json -f schemas/parquet.parquet
+  204  mosquitto_pub -p 18883 -t source -i offline-test -m "{\"values\":\"foo\"}" -d
+  205  ap
+  206  kubectl port-forward svc/aio-broker 18883:18883
+  207  kubectl port-forward svc/aio-broker 1883:18883
+  208  kubectl port-forward svc/aio-broker 18883:1883
+  209  git remote -v
+  210  ./uninstall-dataflow.sh 
+  211  ./uninstall-mq.sh 
+  212  kubectl logs aio-dataflow-operator-0 
+  213  source .env
+  214  kubectl delete secret eh-secret
+  215  az eventhubs eventhub authorization-rule keys list   --resource-group $RESOURCE_GROUP   --namespace-name $EVENTHUB_NAMESPACE   --eventhub-name $EVENTHUB_NAME   --name $EVENTHUB_ACCESS_POLICY_NAME   --query "primaryConnectionString"   | xargs -d '\n' -I {} sh -c 'kubectl create secret generic eh-secret --from-literal=username="\$ConnectionString" --from-literal=password={}'
+  216  kubectl delete pod aio-dataflow-operator-0 
+  217  kubectl logs aio-dataflow-operator-0  
+  218  kubectl create secret generic eventgrid-secret --from-file=client_cert.pem=./cert/$EVENTGRID_FLOW_CLIENT_ID/device_ec_cert.pem --from-file=client_key.pem=./cert/$EVENTGRID_FLOW_CLIENT_ID/device_ec_key.pem
+  219  kubectl delete pod aio-dataflow-operator-0 
+  220  kubectl logs aio-dataflow-operator-0  
+  221  kubectl logs aio-dataflow-mq-offline-flow-0 
+  222  kubectl logs aio-dataflow-mq-offline-flow-0 > test
+  223  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  224  kubectl logs aio-dataflow-operator-0  
+  225  kubectl logs aio-dataflow-mq-offline-flow-0 > test
+  226  ./depl-dataflow_all.sh 
+  227  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  228  kubectl logs aio-dataflow-mq-offline-flow-0 > test
+  229  ./depl-dataflow_all.sh 
+  230  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  231  kubectl logs aio-dataflow-mq-offline-flow-0 > test
+  232  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  233  watch kubectl get pods
+  234  watch kubectl get pods -all-namespaces
+  235  watch kubectl get pods --all-namespaces
+  236  watch kubectl get pods 
+  237  history
+  238  kubectl get service
+  239  kubectl get pods
+  240  kubectl logs aio-dataflow-mq-offline-flow-0 
+  241  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  242  kubectl get pods
+  243  kubectl logs aio-broker-backend-1-0
+  244  kubectl logs aio-broker-backend-1-0 &> test
+  245  kubectl logs aio-broker-backend-1-0
+  246  kubectl logs aio-broker-backend-1-0 &> test
+  247  ./depl-dataflow_all.sh 
+  248  kubectl get pods
+  249  kubectl logs aio-dataflow-mq-offline-flow-0 --previous
+  250  source env
+  251  source .env
+  252  ./depl-dataflow_all.sh 
+  253  kubectl get pods
+  254  kubectl logs aio-dataflow-mq-offline-flow-0 --previous
+  255  kubectl get pods
+  256  ./depl-dataflow_all.sh 
+  257  kubectl get pods
+  258  ./uninstall-dataflow.sh 
+  259  ./depl-dataflow_all.sh 
+  260  kubectl get pods
+  261  kubectl logs aio-dataflow-mq-offline-flow-0 &> test
+  262  kubectl logs aio-broker-backend-1-0  &> test
+  263  kubectl logs aio-dataflow-mq-offline-flow-0 &> test
+  264  kubectl logs aio-broker-backend-1-0  &> test
+  265  kubectl logs aio-dataflow-mq-offline-flow-0 &> test
+  266* kubectl get
+  267  kubectl logs aio-dataflow-mq-offline-flow-0 --previous  &> test
+  268  kubectl logs aio-dataflow-operator-0  --previous  &> test
+  269  ./uninstall-dataflow.sh 
+  270  ./uninstall-mq.sh 
+  271  kubectl get pods -o wide
+  272  source .env
+  273  ./depl-broker.sh 
+  274  ./depl-dataflow_all.sh 
+  275  kubectl get pods
+  276  history
+  277  history | grep mosquitto
+  278  kubectl get pods
+  279  kubectl logs aio-dataflow-mq-offline-flow-0 
+  280  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  281  kubectl get pods
+  282  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  283  kubectl get pods
+  284  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  285  kubectl delete secret eh-secret
+  286  az eventhubs eventhub authorization-rule keys list   --resource-group $RESOURCE_GROUP   --namespace-name $EVENTHUB_NAMESPACE   --eventhub-name $EVENTHUB_NAME   --name $EVENTHUB_ACCESS_POLICY_NAME   --query "primaryConnectionString"   | xargs -d '\n' -I {} sh -c 'kubectl create secret generic eh-secret --from-literal=username="\$ConnectionString" --from-literal=password={}'
+  287  kubectl delete pod aio-dataflow-mq-offline-flow-0
+  288  history &> test
+  289  ./dss/dss_set -k quality -f context.json -a 127.0.0.1 --port 1883
+  290  ./dss/dss_set -k quality -f context.json -a 127.0.0.1 --port 18883
+  291  kubectl get pods
+  292  kubectl delete pod aio-dataflow-mq-offline-flow-0 
+  293  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  294  ./uninstall-dataflow.sh
+  295  ./depl-dataflow_all.sh 
+  296  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  297  ./dss/dss_set -k quality -f context.json -a 127.0.0.1 --port 18883
+  298  history | grep quality
+  299  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  300  kubectl get pods
+  301  kubectl delete aio-dataflow-mq-offline-flow-0  
+  302  kubectl logs aio-dataflow-mq-offline-flow-0  &> test
+  303  history &> test2

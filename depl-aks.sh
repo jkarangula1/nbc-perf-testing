@@ -19,6 +19,7 @@ az aks create \
   --node-count 5 \
   --enable-managed-identity \
   --node-vm-size Standard_D4as_v5 \
+  --network-plugin none \
   --generate-ssh-keys \
   --enable-oidc-issuer
 

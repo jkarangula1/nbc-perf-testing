@@ -47,117 +47,24 @@ spec:
       sourceSettings:
         endpointRef: mq-source
         dataSources:
-        - source
+        - source/#
     - operationType: builtInTransformation
       builtInTransformationSettings:
         map:
-        - inputs:
-          - '"i=2258".Value'
-          output: newi.newValue
+          - inputs: 
+            - '*'
+            output: '*'
 
-        - inputs:
-          - '"i=2258".SourceTimestamp'
-          output: newi.newSourceTimestamp
+          - inputs:
+            - '$context(quality).sweetness'
+            output: context.sweetness
 
-        - inputs:
-          - '"i=2258".ServerTimestamp'
-          output: newi.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".Value'
-          output: newNsu.Value
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".ServerTimestamp'
-          output: newNsu.ServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=StepUp".SourceTimestamp'
-          output: newNsu.SourceTimestamp
-
-        - inputs:
-          - '"ns=23;i=1259".Value'
-          output: newNsi.newValue
-
-        - inputs:
-          - '"ns=23;i=1259".SourceTimestamp'
-          output: newNsi.newSourceTimestamp
-
-        - inputs:
-          - '"ns=23;i=1259".ServerTimestamp'
-          output: newNsi.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".Value'
-          output: newOpcScalar1.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".SourceTimestamp'
-          output: newOpcScalar1.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".ServerTimestamp'
-          output: newOpcScalar1.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar2".Value'
-          output: newOpcScalar2.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar2".SourceTimestamp'
-          output: newOpcScalar2.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar1".ServerTimestamp'
-          output: newOpcScalar2.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".Value'
-          output: newOpcScalar3.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".SourceTimestamp'
-          output: newOpcScalar3.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=SlowRandomUIntScalar3".ServerTimestamp'
-          output: newOpcScalar3.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".Value'
-          output: newOpcBool.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".SourceTimestamp'
-          output: newOpcBool.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=AlternatingBoolean".ServerTimestamp'
-          output: newOpcBool.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".Value'
-          output: newOpcSignedInt32.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".SourceTimestamp'
-          output: newOpcSignedInt32.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomSignedInt32".ServerTimestamp'
-          output: newOpcSignedInt32.newServerTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".Value'
-          output: newOpcUnsignedInt32.newValue
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".SourceTimestamp'
-          output: newOpcUnsignedInt32.newSourceTimestamp
-
-        - inputs:
-          - '"nsu=http://opcfoundation.org/UA/Plc/Applications;s=RandomUnsignedInt32".ServerTimestamp'
-          output: newOpcUnsignedInt32.newServerTimestamp
+        datasets:
+          - key: quality
+            inputs:
+            - '$source.i22581.Value'
+            - '$context.key'
+            expression: '$1 < $2'
     - operationType: destination
       destinationSettings:
         endpointRef: kafka-target
@@ -169,7 +76,7 @@ metadata:
   name: mq-eh-perf-flow
   namespace: default
 spec:
-  instanceCount: 5
+  instanceCount: 2
   diagnostics:
     logs:
       level: "info"

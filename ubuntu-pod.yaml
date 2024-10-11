@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-pod
+  labels:
+    app: ubuntu
+spec:
+  containers:
+  - name: ubuntu-container
+    image: ubuntu:latest
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    resources: {}
+  restartPolicy: Always
+#mosquitto_pub -h aio-broker -p 1883 -t source -i offline-test -m "{\"values\":\"foo\"}" -d --repeat 10000000000 --repeat-delay 0.01 -q 1

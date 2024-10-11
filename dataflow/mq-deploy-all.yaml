@@ -1,0 +1,147 @@
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: eventgrid-target
+  namespace: default
+spec:
+  endpointType: mqtt
+  mqttSettings:
+    host: $EVENTGRID_MQTT_DOMAIN
+    tls:
+      mode: Enabled
+    authentication:
+      method: X509Certificate
+      x509CertificateSettings:
+        secretRef: eventgrid-secret
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: mq-source
+  namespace: default
+spec:
+  endpointType: mqtt
+  mqttSettings:
+    host: "aio-broker:8883"
+    tls:
+      mode: Enabled
+      trustedCaCertificateConfigMapRef: aio-broker-ca
+    maxInflightMessages: 10000
+    authentication:
+      method: ServiceAccountToken
+      serviceAccountTokenSettings:
+        audience: aio-mq-internal
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: nbc-exit-criteria-hugues2-eventgrid-flow
+  namespace: default
+spec:
+  profileRef: mq-offline-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: destination
+      destinationSettings:
+        endpointRef: eventgrid-target
+        dataDestination: $EVENTGRID_TOPIC_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: kafka-target
+  namespace: default
+spec:
+  endpointType: kafka
+  kafkaSettings:
+    copyMqttProperties: Enabled
+    cloudEventAttributes: CreateOrRemap
+    host: $EVENTHUB_KAFKA_DOMAIN
+    tls:
+      mode: Enabled
+    authentication:
+      method: Sasl
+      saslSettings:
+        saslType: plain
+        secretRef: "eh-secret"
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-kafka
+  namespace: default
+spec:
+  profileRef: mq-offline-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source/#
+    - operationType: destination
+      destinationSettings:
+        endpointRef: kafka-target
+        dataDestination: $EVENTHUB_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowEndpoint
+metadata:
+  name: fabric-target
+  namespace: default
+spec:
+  endpointType: fabricOneLake
+  fabricOneLakeSettings:
+    host: "https://msit-onelake.dfs.fabric.microsoft.com"
+    oneLakePathType: Tables
+    names:
+      lakehouseName: broker_offline_scenario_lakehouse
+      workspaceName: broker_offline_scenario
+    batching:
+      latencySeconds: 1
+      maxMessages: 100
+    authentication:
+      method: UserAssignedManagedIdentity
+      userAssignedManagedIdentitySettings:
+        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: Dataflow
+metadata:
+  name: mq-to-fabric
+  namespace: default
+spec:
+  profileRef: mq-offline-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - value
+          output: value
+        schemaRef: "dss://parquet.json"
+        serializationFormat: "Delta"
+    - operationType: destination
+      destinationSettings:
+        endpointRef: fabric-target
+        dataDestination: dest
+---
+apiVersion: connectivity.iotoperations.azure.com/v1beta1
+kind: DataflowProfile
+metadata:
+  name: mq-offline-flow
+  namespace: default
+spec:
+  instanceCount: 1
+  diagnostics:
+    logs:
+      level: "trace"

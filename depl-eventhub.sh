@@ -32,6 +32,8 @@ az eventhubs eventhub authorization-rule keys list \
   --name $EVENTHUB_ACCESS_POLICY_NAME \
   --output table
 
+
+kubectl delete secret eh-secret
 az eventhubs eventhub authorization-rule keys list \
   --resource-group $RESOURCE_GROUP \
   --namespace-name $EVENTHUB_NAMESPACE \
@@ -39,3 +41,4 @@ az eventhubs eventhub authorization-rule keys list \
   --name $EVENTHUB_ACCESS_POLICY_NAME \
   --query "primaryConnectionString" \
   | xargs -d '\n' -I {} sh -c 'kubectl create secret generic eh-secret --from-literal=username="\$ConnectionString" --from-literal=password={}'
+

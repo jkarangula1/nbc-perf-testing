@@ -15,7 +15,8 @@ fi
 # Check if helm dataflows deployment exists
 if ! $(helm list -n default | grep -q dataflows); then
     echo "Helm dataflows deployment does not exist. Installing it now."
-    helm install --atomic dataflows oci://mqbuilds.azurecr.io/helm/dataflows --version $DATAFLOW_VERSION_TAG
+    helm install dataflows ./one-connector/distrib/helm/DATAFLOWS --set image.containerRegistry=dwaltonacr.azurecr.io --set image.tag=viktor
+    # helm install --atomic dataflows oci://mqbuilds.azurecr.io/helm/dataflows --version $DATAFLOW_VERSION_TAG
 
     echo "Sleeping for 10 seconds to let CRDs populate"
     sleep 10
