@@ -6,7 +6,14 @@ metadata:
 spec:
   advanced:
     encryptInternalTraffic: Disabled
-  memoryProfile: "Tiny"
+  memoryProfile: "High"
+  diskBackedMessageBuffer:
+    maxSize: '25G'
+    persistentVolumeClaimSpec:
+      ## Default storage class `rancher.io/local-path` on k3d
+      ## storageClassName: 'foo'
+      accessModes:
+      - 'ReadWriteOnce'
   cardinality:
     frontend:
       replicas: 1
@@ -17,7 +24,7 @@ spec:
       workers: 1
   diagnostics:
     logs:
-      level: info,hyper=off,kube_client=off,tower=off,conhash=off,h2=off
+      level: debug
     metrics:
       prometheusPort: 9600
     selfCheck:

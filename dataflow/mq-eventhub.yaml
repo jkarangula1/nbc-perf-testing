@@ -4,7 +4,7 @@ metadata:
   name: mq-source
   namespace: default
 spec:
-  endpointType: mqttSettings
+  endpointType: mqtt
   mqttSettings:
     host: "aio-broker:8883"
     tls:
@@ -22,7 +22,7 @@ metadata:
   name: kafka-target
   namespace: default
 spec:
-  endpointType: kafkaSettings
+  endpointType: kafka
   kafkaSettings:
     copyMqttProperties: Enabled
     cloudEventAttributes: CreateOrRemap
@@ -48,23 +48,6 @@ spec:
         endpointRef: mq-source
         dataSources:
         - source/#
-    - operationType: builtInTransformation
-      builtInTransformationSettings:
-        map:
-          - inputs: 
-            - '*'
-            output: '*'
-
-          - inputs:
-            - '$context(quality).sweetness'
-            output: context.sweetness
-
-        datasets:
-          - key: quality
-            inputs:
-            - '$source.i22581.Value'
-            - '$context.key'
-            expression: '$1 < $2'
     - operationType: destination
       destinationSettings:
         endpointRef: kafka-target
@@ -79,4 +62,4 @@ spec:
   instanceCount: 2
   diagnostics:
     logs:
-      level: "info"
+      level: "trace"

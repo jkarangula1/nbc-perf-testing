@@ -18,8 +18,9 @@ az aks create \
   --name $CLUSTER_NAME \
   --node-count 5 \
   --enable-managed-identity \
-  --node-vm-size Standard_D4as_v5 \
-  --network-plugin none \
+  --node-vm-size Standard_D4ds_v5 \
+  --network-plugin azure \
+  --network-policy calico \
   --generate-ssh-keys \
   --enable-oidc-issuer
 

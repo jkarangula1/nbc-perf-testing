@@ -4,7 +4,7 @@ metadata:
   name: eventgrid-target
   namespace: default
 spec:
-  endpointType: mqttSettings
+  endpointType: mqtt
   mqttSettings:
     host: $EVENTGRID_MQTT_DOMAIN
     tls:
@@ -20,7 +20,7 @@ metadata:
   name: mq-source
   namespace: default
 spec:
-  endpointType: mqttSettings
+  endpointType: mqtt
   mqttSettings:
     host: "aio-broker:8883"
     tls:

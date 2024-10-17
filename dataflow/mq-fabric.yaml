@@ -4,20 +4,20 @@ metadata:
   name: fabric-target
   namespace: default
 spec:
-  endpointType: fabricOneLakeSettings
+  endpointType: fabricOneLake
   fabricOneLakeSettings:
     host: "https://msit-onelake.dfs.fabric.microsoft.com"
     oneLakePathType: Tables
     names:
-      lakehouseName: dwaltonlakehouse
-      workspaceName: dwalton-connector-test
+      lakehouseName: offlinetests
+      workspaceName: -tesofflinets
     batching:
       latencySeconds: 0
       maxMessages: 100
     authentication:
       method: UserAssignedManagedIdentity
       userAssignedManagedIdentitySettings:
-        clientId: 49fc70e0-95af-4457-9a5f-79ff6295e491
+        clientId: 8213606c-7620-4453-add8-c1b8f2e53503
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1beta1
@@ -26,7 +26,7 @@ metadata:
   name: mq-source
   namespace: default
 spec:
-  endpointType: mqttSettings
+  endpointType: mqtt
   mqttSettings:
     host: "aio-broker:1883"
     tls:
