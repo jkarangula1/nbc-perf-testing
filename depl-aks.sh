@@ -24,6 +24,19 @@ az aks create \
   --generate-ssh-keys \
   --enable-oidc-issuer
 
+# az aks nodepool add \
+#   --resource-group $RESOURCE_GROUP \
+#   --cluster-name $CLUSTER_NAME \
+#   --name newnodepool \
+#   --node-count 5 \
+#   --node-vm-size Standard_D4ds_v5 \
+#   --node-osdisk-size 500
+
+# az aks nodepool delete \
+#   --resource-group $RESOURCE_GROUP \
+#   --cluster-name $CLUSTER_NAME \
+#   --name nodepool1 \
+
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
 
 # To show the OIDC repo name

@@ -1,4 +1,4 @@
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: mq-source
@@ -16,7 +16,7 @@ spec:
       serviceAccountTokenSettings:
         audience: aio-mq-internal
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: kafka-target
@@ -35,7 +35,7 @@ spec:
         saslType: plain
         secretRef: "eh-secret"
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-to-kafka
@@ -53,13 +53,13 @@ spec:
         endpointRef: kafka-target
         dataDestination: $EVENTHUB_NAME
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
 metadata:
   name: mq-eh-perf-flow
   namespace: default
 spec:
-  instanceCount: 2
+  instanceCount: 1
   diagnostics:
     logs:
       level: "trace"

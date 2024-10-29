@@ -1,4 +1,4 @@
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: fabric-target
@@ -9,18 +9,18 @@ spec:
     host: "https://msit-onelake.dfs.fabric.microsoft.com"
     oneLakePathType: Tables
     names:
-      lakehouseName: offlinetests
-      workspaceName: -tesofflinets
+      lakehouseName: nbcofflinelakehouse
+      workspaceName: nbc-offline
     batching:
-      latencySeconds: 0
-      maxMessages: 100
+      latencySeconds: 10
+      maxMessages: 10000
     authentication:
       method: UserAssignedManagedIdentity
       userAssignedManagedIdentitySettings:
         clientId: 8213606c-7620-4453-add8-c1b8f2e53503
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: mq-source
@@ -38,13 +38,13 @@ spec:
       serviceAccountTokenSettings:
         audience: aio-mq-internal
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-to-fabric
   namespace: default
 spec:
-  profileRef: dane-flow
+  profileRef: mq-fabric-offline-flow
   operations:
     - operationType: source
       sourceSettings:
@@ -64,10 +64,10 @@ spec:
         endpointRef: fabric-target
         dataDestination: dest
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
 metadata:
-  name: dane-flow
+  name: mq-fabric-offline-flow
   namespace: default
 spec:
   instanceCount: 1

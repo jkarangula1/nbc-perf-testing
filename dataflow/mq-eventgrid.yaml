@@ -1,4 +1,4 @@
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: eventgrid-target
@@ -10,11 +10,12 @@ spec:
     tls:
       mode: Enabled
     authentication:
-      method: X509Certificate
-      x509CertificateSettings:
-        secretRef: eventgrid-secret
+      method: UserAssignedManagedIdentity
+      userAssignedManagedIdentitySettings:
+        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: mq-source
@@ -32,7 +33,7 @@ spec:
       serviceAccountTokenSettings:
         audience: aio-mq-internal
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: $EVENTGRID_FLOW_NAME
@@ -50,7 +51,7 @@ spec:
         endpointRef: eventgrid-target
         dataDestination: $EVENTGRID_TOPIC_NAME
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
 metadata:
   name: mq-eventgrid-perf-flow

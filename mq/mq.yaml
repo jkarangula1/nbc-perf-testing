@@ -8,7 +8,7 @@ spec:
     encryptInternalTraffic: Disabled
   memoryProfile: "High"
   diskBackedMessageBuffer:
-    maxSize: '25G'
+    maxSize: '250G'
     persistentVolumeClaimSpec:
       ## Default storage class `rancher.io/local-path` on k3d
       ## storageClassName: 'foo'

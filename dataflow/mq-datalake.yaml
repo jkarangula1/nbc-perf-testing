@@ -1,11 +1,11 @@
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: datalake-target
   namespace: default
 spec:
-  endpointType: datalakeStorageSettings
-  datalakeStorageSettings:
+  endpointType: dataLakeStorage
+  dataLakeStorageSettings:
     host: "https://$STORAGE_ACCOUNT_NAME.blob.core.windows.net/"
     batching:
       latencySeconds: 0
@@ -16,13 +16,13 @@ spec:
         clientId: $MANAGED_IDENTITY_CLIENT_ID
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: mq-source
   namespace: default
 spec:
-  endpointType: mqttSettings
+  endpointType: mqtt
   mqttSettings:
     host: "aio-broker:8883"
     tls:
@@ -34,7 +34,7 @@ spec:
       serviceAccountTokenSettings:
         audience: aio-mq-internal
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-to-datalake
@@ -60,7 +60,7 @@ spec:
         endpointRef: datalake-target
         dataDestination: $STORAGE_CONTAINER_NAME
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
 metadata:
   name: mq-datalake-perf-flow

@@ -1,4 +1,4 @@
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: eventgrid-target
@@ -15,7 +15,7 @@ spec:
         clientId: $MANAGED_IDENTITY_CLIENT_ID
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: mq-source
@@ -33,7 +33,7 @@ spec:
       serviceAccountTokenSettings:
         audience: aio-mq-internal
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-eventgrid
@@ -51,7 +51,7 @@ spec:
         endpointRef: eventgrid-target
         dataDestination: $EVENTGRID_TOPIC_NAME
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: kafka-target
@@ -70,7 +70,7 @@ spec:
         saslType: plain
         secretRef: "eh-secret"
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-to-kafka
@@ -88,7 +88,7 @@ spec:
         endpointRef: kafka-target
         dataDestination: $EVENTHUB_NAME
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
 metadata:
   name: fabric-target
@@ -99,18 +99,18 @@ spec:
     host: "https://msit-onelake.dfs.fabric.microsoft.com"
     oneLakePathType: Tables
     names:
-      lakehouseName: offlinetests
-      workspaceName: offline-tests
+      lakehouseName: nbcofflinelakehouse
+      workspaceName: nbc-offline
     batching:
-      latencySeconds: 0
-      maxMessages: 100
+      latencySeconds: 10
+      maxMessages: 10000
     authentication:
       method: UserAssignedManagedIdentity
       userAssignedManagedIdentitySettings:
         clientId: 8213606c-7620-4453-add8-c1b8f2e53503
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: Dataflow
 metadata:
   name: mq-to-fabric
@@ -136,7 +136,51 @@ spec:
         endpointRef: fabric-target
         dataDestination: dest
 ---
-apiVersion: connectivity.iotoperations.azure.com/v1beta1
+apiVersion: connectivity.iotoperations.azure.com/v1
+kind: DataflowEndpoint
+metadata:
+  name: datalake-target
+  namespace: default
+spec:
+  endpointType: dataLakeStorage
+  dataLakeStorageSettings:
+    host: "https://$STORAGE_ACCOUNT_NAME.blob.core.windows.net/"
+    batching:
+      latencySeconds: 0
+      maxMessages: 100
+    authentication:
+      method: UserAssignedManagedIdentity
+      userAssignedManagedIdentitySettings:
+        clientId: $MANAGED_IDENTITY_CLIENT_ID
+        tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
+---
+apiVersion: connectivity.iotoperations.azure.com/v1
+kind: Dataflow
+metadata:
+  name: mq-to-datalake
+  namespace: default
+spec:
+  profileRef: mq-offline-flow
+  operations:
+    - operationType: source
+      sourceSettings:
+        endpointRef: mq-source
+        dataSources:
+        - source
+    - operationType: builtInTransformation
+      builtInTransformationSettings:
+        map:
+        - inputs:
+          - value
+          output: value
+        schemaRef: "dss://parquet.json"
+        serializationFormat: "Delta"
+    - operationType: destination
+      destinationSettings:
+        endpointRef: datalake-target
+        dataDestination: $STORAGE_CONTAINER_NAME
+---
+apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
 metadata:
   name: mq-offline-flow
@@ -145,4 +189,4 @@ spec:
   instanceCount: 1
   diagnostics:
     logs:
-      level: "trace"
+      level: "info"
