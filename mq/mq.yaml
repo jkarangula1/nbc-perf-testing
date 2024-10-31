@@ -1,4 +1,4 @@
-apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+apiVersion: mqttbroker.iotoperations.azure.com/v1
 kind: Broker
 metadata:
   name: broker
@@ -37,7 +37,7 @@ spec:
   generateResourceLimits:
     cpu: Disabled
 ---
-apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+apiVersion: mqttbroker.iotoperations.azure.com/v1
 kind: BrokerListener
 metadata:
   name: "aio-broker"
