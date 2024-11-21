@@ -42,3 +42,6 @@ az eventhubs eventhub authorization-rule keys list \
   --query "primaryConnectionString" \
   | xargs -d '\n' -I {} sh -c 'kubectl create secret generic eh-secret --from-literal=username="\$ConnectionString" --from-literal=password={}'
 
+
+# ./emqtt_bench sub -c 100 -h aio-broker  -t source/%i   -q 1 --payload-hdrs  ts
+# ./emqtt_bench pub -c 100 -h  aio-broker -t source/%i -I 2 -s 8192 -q 1 -F 100 --payload-hdrs  ts

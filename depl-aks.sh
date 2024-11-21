@@ -27,15 +27,20 @@ az aks create \
 # az aks nodepool add \
 #   --resource-group $RESOURCE_GROUP \
 #   --cluster-name $CLUSTER_NAME \
-#   --name newnodepool \
+#   --name kafkapool \
 #   --node-count 5 \
-#   --node-vm-size Standard_D4ds_v5 \
+#   --node-vm-size Standard_D8ds_v5 \
 #   --node-osdisk-size 500
 
-# az aks nodepool delete \
-#   --resource-group $RESOURCE_GROUP \
-#   --cluster-name $CLUSTER_NAME \
-#   --name nodepool1 \
+
+# kubectl cordon aks-bignodepool-11739051-vmss000000 aks-bignodepool-11739051-vmss000001 aks-bignodepool-11739051-vmss000002 aks-bignodepool-11739051-vmss000003 aks-bignodepool-11739051-vmss000004 
+
+# kubectl drain aks-bignodepool-11739051-vmss000000 aks-bignodepool-11739051-vmss000001 aks-bignodepool-11739051-vmss000002 aks-bignodepool-11739051-vmss000003 aks-bignodepool-11739051-vmss000004 --ignore-daemonsets --delete-emptydir-data
+
+az aks nodepool delete \
+  --resource-group $RESOURCE_GROUP \
+  --cluster-name $CLUSTER_NAME \
+  --name bignodepool 
 
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
 

@@ -1,0 +1,130 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-pod-to-pod-with-localhost
+  namespace: default  # Apply this in the appropriate namespace
+spec:
+  podSelector: {}  # Apply to all pods in the default namespace
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector: {}
+    - podSelector: {}  # Allow egress to all pods
+    - ipBlock:
+        cidr: 20.0.0.0/8 # _ _ _ _ . 
+        except:
+        - "20.150.160.224/27"
+        - "20.150.170.160/27"
+        - "20.150.175.64/26"
+        - "20.150.178.64/26"
+        - "20.150.182.0/27"
+        - "20.150.186.64/26"
+        - "20.150.189.128/26"
+        - "20.150.246.32/27"
+        - "20.150.246.64/26"
+        - "20.150.246.128/25"
+        - "20.150.164.0/25"
+        - "20.150.171.72/29"
+        - "20.150.181.160/30"
+        - "20.150.189.28/30"
+        - "20.150.225.4/30"
+        - "20.119.199.45/32"
+        - "20.122.64.76/32"
+        - "20.60.14.164/32"
+        - "20.33.128.0/17"
+        - "20.38.96.0/19"
+        - "20.47.0.0/18"
+        - "20.60.0.0/16"
+        - "20.150.0.0/17"
+        - "20.153.0.0/17"
+        - "20.157.32.0/19"
+        - "20.157.128.0/18"
+        - "20.157.224.0/19"
+        - "20.209.0.0/16"
+        - "20.20.0.0/16"
+        - "20.150.0.0/16"
+        - "20.72.0.0/16"
+        - "20.190.0.0/16"
+        - "20.231.0.0/16"
+        # - "40.82.254.9/16"
+        # - "52.159.201.13/16"
+        
+    # - ipBlock:
+    #     cidr: 10.0.0.1/8  # Allow egress to localhost (loopback interface)
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: allow-pod-to-pod-with-localhost
+#   namespace: default  # Apply this in the appropriate namespace
+# spec:
+#   podSelector: {}  # Apply to all pods in the default namespace
+#   policyTypes:
+#   - Ingress
+#   - Egress
+#   ingress:
+#   - from:
+#     - namespaceSelector: {}
+#     - podSelector: {}  # Allow traffic from all pods (within and across namespaces)
+#     - ipBlock:
+#         cidr: 127.0.0.1/32  # Allow traffic from localhost (loopback interface)
+#   egress:
+#   - to:
+#     - namespaceSelector: {}
+#     - podSelector: {}  # Allow egress to all pods
+#     - ipBlock:
+#         cidr: 10.0.0.1/32  # Allow egress to localhost (loopback interface)
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: deny-all-egress
+#   namespace: default
+# spec:
+#   podSelector: {}
+#   policyTypes:
+#   - Ingress
+#   - Egress
+#   egress:
+#   - to:
+#     - namespaceSelector: {}
+#     - podSelector: {}
+#   ingress:
+#   - from:
+#     - namespaceSelector: {}
+#     - podSelector: {}
+#     # ports:
+#     # - port: 6443
+#       # port: 6443
+
+# # apiVersion: networking.k8s.io/v1
+# # kind: NetworkPolicy
+# # metadata:
+# #   name: deny-all-egress
+# #   namespace: default
+# # spec:
+# #   podSelector: {}
+# #   policyTypes:
+# #   - Ingress
+# #   - Egress
+# #   egress:
+# #   - to:
+# #     - namespaceSelector: {}
+# #     - podSelector: {}
+# #   ingress:
+# #     - to:
+# #       - podSelector: {}
+# #       ports:
+# #         - port: 6443
+
+#     # 6443
+
+# # apiVersion: networking.k8s.io/v1
+# # kind: NetworkPolicy
+# # metadata:
+# #   name: deny-all-egress
+# #   namespace: default
+# # spec:
+# #   podSelector: {}
+# #   policyTypes:
+# #   - Egress
+# #   egress: []

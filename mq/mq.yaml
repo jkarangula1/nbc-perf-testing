@@ -1,4 +1,4 @@
-apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+apiVersion: mqttbroker.iotoperations.azure.com/v1
 kind: Broker
 metadata:
   name: broker
@@ -8,7 +8,7 @@ spec:
     encryptInternalTraffic: Disabled
   memoryProfile: "High"
   diskBackedMessageBuffer:
-    maxSize: '250G'
+    maxSize: '10G'
     persistentVolumeClaimSpec:
       ## Default storage class `rancher.io/local-path` on k3d
       ## storageClassName: 'foo'
@@ -16,12 +16,12 @@ spec:
       - 'ReadWriteOnce'
   cardinality:
     frontend:
-      replicas: 1
-      workers: 1
+      replicas: 5
+      workers: 8
     backendChain:
-      redundancyFactor: 1
-      partitions: 1
-      workers: 1
+      redundancyFactor: 2
+      partitions: 5
+      workers: 4
   diagnostics:
     logs:
       level: debug
@@ -36,8 +36,8 @@ spec:
         intervalSeconds: 60
   generateResourceLimits:
     cpu: Disabled
----
-apiVersion: mqttbroker.iotoperations.azure.com/v1beta1
+--- 
+apiVersion: mqttbroker.iotoperations.azure.com/v1
 kind: BrokerListener
 metadata:
   name: "aio-broker"
@@ -56,3 +56,4 @@ spec:
           issuerRef:
             name: aio-ca-issuer
             kind: Issuer
+ 

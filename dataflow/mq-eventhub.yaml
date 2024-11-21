@@ -26,7 +26,11 @@ spec:
   kafkaSettings:
     copyMqttProperties: Enabled
     cloudEventAttributes: CreateOrRemap
-    host: $EVENTHUB_KAFKA_DOMAIN
+    host: "jkarangula2.servicebus.windows.net:9093"
+    batching:
+      mode: enabled
+      latencyMs:  50
+      maxMessages: 100000
     tls:
       mode: Enabled
     authentication:
@@ -51,7 +55,7 @@ spec:
     - operationType: destination
       destinationSettings:
         endpointRef: kafka-target
-        dataDestination: $EVENTHUB_NAME
+        dataDestination: test
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowProfile
@@ -59,7 +63,7 @@ metadata:
   name: mq-eh-perf-flow
   namespace: default
 spec:
-  instanceCount: 1
+  instanceCount: 15
   diagnostics:
     logs:
-      level: "trace"
+      level: "info"

@@ -107,7 +107,7 @@ spec:
     authentication:
       method: UserAssignedManagedIdentity
       userAssignedManagedIdentitySettings:
-        clientId: 8213606c-7620-4453-add8-c1b8f2e53503
+        clientId: 5dcfabed-6d38-43d8-86f2-0db873cc6c8b
         tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1
@@ -134,7 +134,7 @@ spec:
     - operationType: destination
       destinationSettings:
         endpointRef: fabric-target
-        dataDestination: dest
+        dataDestination: dest2
 ---
 apiVersion: connectivity.iotoperations.azure.com/v1
 kind: DataflowEndpoint
